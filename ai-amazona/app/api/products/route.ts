@@ -27,13 +27,11 @@ export async function GET(request: NextRequest) {
                   {
                     name: {
                       contains: search,
-                      mode: 'insensitive' as Prisma.QueryMode,
                     },
                   },
                   {
                     description: {
                       contains: search,
-                      mode: 'insensitive' as Prisma.QueryMode,
                     },
                   },
                 ],

@@ -59,7 +59,12 @@ export function ProductRelated({
               key={product.id}
               className='md:basis-1/2 lg:basis-1/3'
             >
-              <ProductCard product={product} />
+              <ProductCard 
+                product={{
+                  ...product,
+                  images: product.images ? product.images.split(',').map(img => img.trim()) : []
+                }} 
+              />
             </CarouselItem>
           ))}
         </CarouselContent>
