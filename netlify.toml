@@ -1,6 +1,6 @@
 [build]
   command = "npm run build:netlify"
-  publish = "ai-amazona/.next"
+  publish = ".next"
   base = "ai-amazona"
 
 [build.environment]
