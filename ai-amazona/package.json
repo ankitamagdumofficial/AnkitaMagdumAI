@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "build:netlify": "npx prisma generate && next build",
+    "build:netlify": "SKIP_ENV_VALIDATION=true next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

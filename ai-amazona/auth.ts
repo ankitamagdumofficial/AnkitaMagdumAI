@@ -1,11 +1,9 @@
 import NextAuth, { DefaultSession } from 'next-auth'
-import { PrismaClient } from '@prisma/client'
+import prisma from '@/lib/prisma'
 import authConfig from './auth.config'
 import bcrypt from 'bcryptjs'
 import Credentials from 'next-auth/providers/credentials'
 import { User } from '@prisma/client'
-
-const prisma = new PrismaClient()
 
 declare module 'next-auth' {
   interface Session {
@@ -39,26 +37,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const email = credentials.email as string
         const password = credentials.password as string
 
-        const user = await prisma.user.findUnique({
-          where: { email },
-        })
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email },
+          })
 
-        if (!user || !user.password) {
+          if (!user || !user.password) {
+            return null
+          }
+
+          const isPasswordValid = await bcrypt.compare(password, user.password)
+
+          if (!isPasswordValid) {
+            return null
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            role: user.role,
+          }
+        } catch (error) {
+          console.error('Auth error:', error)
           return null
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password)
-
-        if (!isPasswordValid) {
-          return null
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          image: user.image,
-          role: user.role,
         }
       },
     }),

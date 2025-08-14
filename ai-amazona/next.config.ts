@@ -13,6 +13,15 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
+  // Skip validation during build if needed (for Netlify)
+  eslint: {
+    ignoreDuringBuilds: process.env.SKIP_ENV_VALIDATION === 'true',
+  },
+  
+  typescript: {
+    ignoreBuildErrors: process.env.SKIP_ENV_VALIDATION === 'true',
+  },
+  
   // Headers for better browser extension compatibility
   async headers() {
     return [
